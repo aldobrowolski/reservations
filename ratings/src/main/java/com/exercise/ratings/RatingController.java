@@ -23,10 +23,16 @@ public class RatingController {
 	}
 	
 	@RequestMapping("/ratings")
-	public List<RatingDto> ratings(@PathVariable String id) {
+	public List<RatingDto> ratings() {
 		return ratingRepository.findAll().stream().map(this::toRatingDto).collect(Collectors.toList());
 	}
 	
+	@RequestMapping("/ratings/{roomId}")
+	public RatingDto ratingById(@PathVariable Long roomId) {
+		Rating rating = ratingRepository.findRating(roomId);
+		return toRatingDto(rating);
+	}
+		
 	private RatingDto toRatingDto(Rating rating) {
 		RatingDto dto = new RatingDto();
 		dto.setRating(rating.getRating());
