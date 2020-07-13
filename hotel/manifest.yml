@@ -1,0 +1,10 @@
+---
+applications:
+- name: hotel
+  memory: 1024MB
+  host: hotel
+  path: target/hotel-0.0.1-SNAPSHOT.jar
+  env:
+    spring.profiles.active: cloud
+  services:
+  - eureka
