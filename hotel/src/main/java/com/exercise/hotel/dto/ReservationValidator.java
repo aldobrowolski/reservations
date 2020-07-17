@@ -10,5 +10,4 @@ public class ReservationValidator implements ConstraintValidator<ReservationCons
 		return value.getStartDate() != null && value.getEndDate() != null &&
 			   !value.getEndDate().isBefore(value.getStartDate());
 	}
-
 }

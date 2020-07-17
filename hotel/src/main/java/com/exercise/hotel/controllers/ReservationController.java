@@ -36,7 +36,7 @@ public class ReservationController {
 	}
 	
 	@PutMapping("/reservations/{id}")	
-	public String updateReservation(@PathVariable Long id, @Valid @RequestBody ReservationDto dto) {
+	public String updateReservation(@PathVariable Long id, @RequestBody ReservationDto dto) {
 		Reservation reservation = reservationHandler.saveReservation(id, dto);
 		return linkService.getReservationLink(reservation.getId());
 	}

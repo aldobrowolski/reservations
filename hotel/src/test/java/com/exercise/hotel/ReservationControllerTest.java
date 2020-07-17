@@ -64,8 +64,8 @@ public class ReservationControllerTest {
         
         when(reservationHandler.findById(anyLong())).thenReturn(reservations);
         
-		mockMvc.perform(get("/reservations")).andDo(print()).andExpect(status().
-				isOk()).andExpect(content().string(containsString("\"peopleNumber\":\"3\"")));
+		mockMvc.perform(get("/reservations?roomNumber=1")).andDo(print()).andExpect(status().
+				isOk()).andExpect(content().string(containsString("\"peopleNumber\":3")));
 	}
 	
 	@Test

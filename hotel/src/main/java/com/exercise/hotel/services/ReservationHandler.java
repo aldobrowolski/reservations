@@ -85,8 +85,6 @@ public class ReservationHandler {
 				orElseThrow(() -> new ReservationNotFoundException(dto.getId()));
 		reservation.setUserName(dto.getUserName());
 		reservation.setPeopleNumber(dto.getPeopleNumber());
-		reservation.setStartDate(dto.getStartDate());
-		reservation.setEndDate(dto.getEndDate());
 		return reservation;
 	}
 	
