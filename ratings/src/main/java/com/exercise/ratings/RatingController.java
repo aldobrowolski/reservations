@@ -29,14 +29,14 @@ public class RatingController {
 	
 	@RequestMapping("/ratings/{roomId}")
 	public RatingDto ratingById(@PathVariable Long roomId) {
-		Rating rating = ratingRepository.findRating(roomId);
+		Rating rating = ratingRepository.findById(roomId).get();
 		return toRatingDto(rating);
 	}
 		
 	private RatingDto toRatingDto(Rating rating) {
 		RatingDto dto = new RatingDto();
 		dto.setRating(rating.getRating());
-		dto.setRoomId(rating.getRoomId());
+		dto.setRoomId(rating.getId());
 		return dto;
 	}
 

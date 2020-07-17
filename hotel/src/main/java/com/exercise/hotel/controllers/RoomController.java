@@ -3,35 +3,33 @@ package com.exercise.hotel.controllers;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.exercise.hotel.dto.RatingDto;
 
 @RestController
 public class RoomController {
-	
-	private DiscoveryClient discoveryClient;
-		
-	public RoomController(DiscoveryClient discoveryClient) {
-		this.discoveryClient = discoveryClient;
-	}
-	
-	@RequestMapping("/ratings")	
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@RequestMapping("/ratings")
 	public List<RatingDto> ratings() {
-		String uri = discoveryClient.getInstances("ratings").get(0).getUri().toString();
-		RestTemplate restTemplate = new RestTemplate();
-		RatingDto[] ratings = restTemplate.getForEntity(uri + "/ratings", RatingDto[].class).getBody();
+		String uri = UriComponentsBuilder.fromUriString("//ratings/ratings").
+				build().toString();
+		RatingDto[] ratings = restTemplate.getForEntity(uri, RatingDto[].class).getBody();
 		return Arrays.asList(ratings);
 	}
 
-	@RequestMapping("/ratings/{roomId}")	
+	@RequestMapping("/ratings/{roomId}")
 	public RatingDto rating(@PathVariable Long roomId) {
-		String uri = discoveryClient.getInstances("ratings").get(0).getUri().toString();
-		RestTemplate restTemplate = new RestTemplate();
-		return restTemplate.getForObject(uri + "/ratings/" + roomId, RatingDto.class);
+		String uri = UriComponentsBuilder.fromUriString("//ratings/ratings/{roomId}").
+				build(roomId).toString();
+		return restTemplate.getForObject(uri, RatingDto.class);
 	}
-	
+
 }

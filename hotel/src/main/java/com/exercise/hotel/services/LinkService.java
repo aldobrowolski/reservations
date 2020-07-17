@@ -18,5 +18,5 @@ public class LinkService {
 		return linkTo(methodOn(ReservationController.class).reservations((Long) null)).
 				toUri().toString();
 	}
-	
+
 }

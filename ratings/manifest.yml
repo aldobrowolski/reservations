@@ -1,8 +1,6 @@
 ---
 applications:
 - name: ratings
-  memory: 1024MB
-  host: ratings
   path: target/ratings-0.0.1-SNAPSHOT.jar
   env:
     spring.profiles.active: cloud
