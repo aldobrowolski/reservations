@@ -11,8 +11,7 @@ import com.exercise.hotel.model.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-	@Query("SELECT r FROM Reservation r where r.room.id = :id")
-	List<Reservation> findByRoomId(@Param("id") Long id);
+	List<Reservation> findByRoomId(Long id);
 	
 	@Query("SELECT r FROM Reservation r where r.room.id = :roomId AND r.id <> :id"
 			+ " AND (r.startDate BETWEEN :start AND :end"

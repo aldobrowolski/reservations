@@ -53,3 +53,4 @@ public class ReservationController {
 		return linkService.getReservationLink(id);
 	}	
 }
+

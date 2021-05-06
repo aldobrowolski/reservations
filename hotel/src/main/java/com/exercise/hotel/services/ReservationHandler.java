@@ -3,6 +3,7 @@ package com.exercise.hotel.services;
 import static com.exercise.hotel.model.RoomType.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -35,14 +36,9 @@ public class ReservationHandler {
 	
 	public Reservation saveReservation(Long id, ReservationDto dto) {
 		Room room = findRoom(id, dto);
-		if (dto.getPeopleNumber() > room.getType().getMaxPeople()) {
-			throw new ReservationNotFoundException("The maximum number of people for " + 
-		    room.getType() + " is " + room.getType().getMaxPeople());
-		}		
-		if (!isReservationAvailable(id, dto, room.getId())) {
-			throw new ReservationNotFoundException("Reservation is unavailable for the given time period.");
-		}
-		Reservation reservation = mapToReservationEntity(dto, id);		
+		validateGuestsNumber(dto, room);		
+		validateReservationAvailibility(id, dto, room);
+		Reservation reservation = updateReservation(dto, id);		
 		reservation.setRoom(room);
 		return reservationRepository.save(reservation);		
 	}
@@ -80,11 +76,13 @@ public class ReservationHandler {
 		return dto;
 	}
 	
-	private Reservation mapToReservationEntity(ReservationDto dto, Long id) {
+	private Reservation updateReservation(ReservationDto dto, Long id) {
 		Reservation reservation = reservationRepository.findById(id).
-				orElseThrow(() -> new ReservationNotFoundException(dto.getId()));
-		reservation.setUserName(dto.getUserName());
-		reservation.setPeopleNumber(dto.getPeopleNumber());
+				orElseThrow(() -> new ReservationNotFoundException(id));
+		Optional.ofNullable(dto.getUserName()).ifPresent(userName -> reservation.setUserName(userName));
+		Optional.ofNullable(dto.getPeopleNumber()).ifPresent(number -> reservation.setPeopleNumber(number));
+		Optional.ofNullable(dto.getStartDate()).ifPresent(date -> reservation.setStartDate(date));
+		Optional.ofNullable(dto.getEndDate()).ifPresent(date -> reservation.setEndDate(date));
 		return reservation;
 	}
 	
@@ -95,7 +93,7 @@ public class ReservationHandler {
 		if (count <= BASIC.getMaxPeople()) {
 			return BASIC;
 		}
-		else if (count <= SUITE.getMaxPeople()) {
+		if (count <= SUITE.getMaxPeople()) {
 			return SUITE; 
 		}
 		return PENTHOUSE;
@@ -117,17 +115,33 @@ public class ReservationHandler {
 	}
 	
 	private Room findRoom(Long reservationId, ReservationDto dto) {
-		Room reservationRoom = findReservation(reservationId).getRoom();
+		Reservation reservation = findReservation(reservationId);
+		Room reservationRoom = reservation.getRoom();
 		if (dto.getRoomId() == null) {
 			return reservationRoom;
 		}
 		return roomRepository.findById(dto.getRoomId()).
-				orElse(reservationRoom);
+				orElseThrow(() -> new ReservationNotFoundException("No room with the id: " + dto.getRoomId()));
 	}	
 	
 	private Reservation findReservation(Long id) {
 		return reservationRepository.findById(id).
 				orElseThrow(() -> new ReservationNotFoundException(id));
 	}
+	
+	private void validateReservationAvailibility(Long id, ReservationDto dto, Room room) {
+		if (!isReservationAvailable(id, dto, room.getId())) {
+			throw new ReservationNotFoundException("Reservation is unavailable for the given time period.");
+		}
+	}
 
+	private void validateGuestsNumber(ReservationDto dto, Room room) {
+		if (dto.getPeopleNumber() == null) {
+			return;
+		}
+		if (dto.getPeopleNumber() > room.getType().getMaxPeople()) {
+			throw new ReservationNotFoundException("The maximum number of people for " + 
+		    room.getType() + " is " + room.getType().getMaxPeople());
+		}
+	}	
 }

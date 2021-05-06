@@ -28,7 +28,7 @@ public class DatabaseLoader implements CommandLineRunner {
 		Room room = newRoom(RoomType.BASIC);
 		roomRepository.save(room);
 		room = roomRepository.findById(room.getId()).get();
-		Reservation reservation = newReservation(room, "Bob", 3, LocalDate.now(), LocalDate.of(2020, 7, 30));
+		Reservation reservation = newReservation(room, "Bob", 3, LocalDate.now(), LocalDate.of(2021, 5, 30));
 		reservation = reservationRepository.save(reservation);
 		room = newRoom(RoomType.BASIC);
 		roomRepository.save(room);		
