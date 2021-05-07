@@ -15,41 +15,41 @@ public class ReservationController {
 	
 	private LinkService linkService;
 	
-	private ReservationHandler reservationHandler;
+	private ReservationService reservationService;
 	
-	public ReservationController(LinkService linkService, ReservationHandler reservationMapper) {
+	public ReservationController(LinkService linkService, ReservationService reservationMapper) {
 		this.linkService = linkService;
-		this.reservationHandler = reservationMapper;
+		this.reservationService = reservationMapper;
 	}
 	
 	@GetMapping("/reservations")
 	public List<ReservationDto> reservations(@RequestParam(name = "roomNumber", required = false) Long id) {
 		if (id == null) {
-		return reservationHandler.findAll();
+		return reservationService.findAll();
 		}
-		return reservationHandler.findById(id);		
+		return reservationService.findById(id);		
 	}
 
 	@GetMapping("/reservations/{id}")
 	public ReservationDto reservation(@PathVariable Long id) {
-		return reservationHandler.getReservation(id);
+		return reservationService.getReservation(id);
 	}
 	
 	@PutMapping("/reservations/{id}")	
 	public String updateReservation(@PathVariable Long id, @RequestBody ReservationDto dto) {
-		Reservation reservation = reservationHandler.saveReservation(id, dto);
+		Reservation reservation = reservationService.saveReservation(id, dto);
 		return linkService.getReservationLink(reservation.getId());
 	}
 	
 	@DeleteMapping("/reservations/{id}")	
 	public String deleteReservation(@PathVariable Long id) {
-		reservationHandler.deleteReservation(id);
+		reservationService.deleteReservation(id);
 		return linkService.getReservationsLink();
 	}
 	
 	@PostMapping("/reservations")
 	public String addReservation(@Valid @RequestBody ReservationDto dto) {
-		Long id = reservationHandler.addReservation(dto);
+		Long id = reservationService.addReservation(dto);
 		return linkService.getReservationLink(id);
 	}	
 }

@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.exercise.hotel.dao.*;
 import com.exercise.hotel.dto.ReservationDto;
 import com.exercise.hotel.services.LinkService;
-import com.exercise.hotel.services.ReservationHandler;
+import com.exercise.hotel.services.ReservationService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -37,7 +37,7 @@ public class ReservationControllerTest {
 	private LinkService linkService;
 	
 	@MockBean
-	private ReservationHandler reservationHandler;
+	private ReservationService reservationHandler;
 	
 	@MockBean
 	private RestTemplate restTemplate;	

@@ -19,7 +19,7 @@ import com.exercise.hotel.dao.ReservationRepository;
 import com.exercise.hotel.dao.RoomRepository;
 import com.exercise.hotel.dto.RatingDto;
 import com.exercise.hotel.services.LinkService;
-import com.exercise.hotel.services.ReservationHandler;
+import com.exercise.hotel.services.ReservationService;
 
 @WebMvcTest
 public class RoomControllerTest {
@@ -37,7 +37,7 @@ public class RoomControllerTest {
 	private LinkService linkService;
 	
 	@MockBean
-	private ReservationHandler reservationHandler;
+	private ReservationService reservationHandler;
 	
 	@MockBean
 	private RestTemplate restTemplate;	
