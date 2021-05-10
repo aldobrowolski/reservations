@@ -37,7 +37,7 @@ public class RoomControllerTest {
 	private LinkService linkService;
 	
 	@MockBean
-	private ReservationService reservationHandler;
+	private ReservationService reservationService;
 	
 	@MockBean
 	private RestTemplate restTemplate;	

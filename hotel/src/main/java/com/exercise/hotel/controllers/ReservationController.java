@@ -27,7 +27,7 @@ public class ReservationController {
 		if (id == null) {
 		return reservationService.findAll();
 		}
-		return reservationService.findById(id);		
+		return reservationService.findByRoomId(id);		
 	}
 
 	@GetMapping("/reservations/{id}")

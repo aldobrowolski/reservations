@@ -29,16 +29,17 @@ public class ReservationService {
 		collect(Collectors.toList());
 	}
 	
-	public List<ReservationDto> findById(Long id) {
+	public List<ReservationDto> findByRoomId(Long id) {
 		return reservationRepository.findByRoomId(id).stream().map(this::mapToReservationDto).
 				collect(Collectors.toList());		
 	}
 	
 	public Reservation saveReservation(Long id, ReservationDto dto) {
-		Room room = findRoom(id, dto);
+		Reservation reservation = findReservation(id);
+		Room room = reservation.getRoom();
 		validateGuestsNumber(dto, room);		
 		validateReservationAvailibility(id, dto, room);
-		Reservation reservation = updateReservation(dto, id);		
+		updateReservation(reservation, dto);		
 		reservation.setRoom(room);
 		return reservationRepository.save(reservation);		
 	}
@@ -76,9 +77,7 @@ public class ReservationService {
 		return dto;
 	}
 	
-	private Reservation updateReservation(ReservationDto dto, Long id) {
-		Reservation reservation = reservationRepository.findById(id).
-				orElseThrow(() -> new ReservationNotFoundException(id));
+	private Reservation updateReservation(Reservation reservation, ReservationDto dto) {
 		Optional.ofNullable(dto.getUserName()).ifPresent(userName -> reservation.setUserName(userName));
 		Optional.ofNullable(dto.getPeopleNumber()).ifPresent(number -> reservation.setPeopleNumber(number));
 		Optional.ofNullable(dto.getStartDate()).ifPresent(date -> reservation.setStartDate(date));
@@ -114,15 +113,6 @@ public class ReservationService {
 				dto.getStartDate(), dto.getEndDate(), roomId).isEmpty();		
 	}
 	
-	private Room findRoom(Long reservationId, ReservationDto dto) {
-		Reservation reservation = findReservation(reservationId);
-		Room reservationRoom = reservation.getRoom();
-		if (dto.getRoomId() == null) {
-			return reservationRoom;
-		}
-		return roomRepository.findById(dto.getRoomId()).
-				orElseThrow(() -> new ReservationNotFoundException("No room with the id: " + dto.getRoomId()));
-	}	
 	
 	private Reservation findReservation(Long id) {
 		return reservationRepository.findById(id).
