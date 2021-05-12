@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -14,15 +15,18 @@ import com.exercise.hotel.dto.RatingDto;
 @RestController
 public class RoomController {
 
-	private static final String SINGLE_RATING_URI = "//ratings/ratings/{roomId}";
-	private static final String ALL_RATINGS_URI = "//ratings/ratings";
+	@Value("${singleRatingUri}")
+	private String singleRatingUri;
+
+	@Value("${allRatingsUri}")
+	private String allRatingsUri;
 	
 	@Autowired
 	private RestTemplate restTemplate;
 
 	@RequestMapping("/ratings")
 	public List<RatingDto> ratings() {
-		String uri = UriComponentsBuilder.fromUriString(ALL_RATINGS_URI).
+		String uri = UriComponentsBuilder.fromUriString(allRatingsUri).
 				build().toString();
 		RatingDto[] ratings = restTemplate.getForEntity(uri, RatingDto[].class).getBody();
 		return Arrays.asList(ratings);
@@ -30,7 +34,7 @@ public class RoomController {
 
 	@RequestMapping("/ratings/{roomId}")
 	public RatingDto rating(@PathVariable Long roomId) {
-		String uri = UriComponentsBuilder.fromUriString(SINGLE_RATING_URI).
+		String uri = UriComponentsBuilder.fromUriString(singleRatingUri).
 				build(roomId).toString();
 		return restTemplate.getForObject(uri, RatingDto.class);
 	}

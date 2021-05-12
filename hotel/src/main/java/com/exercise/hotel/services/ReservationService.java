@@ -66,15 +66,15 @@ public class ReservationService {
 	
 	private ReservationDto mapToReservationDto(Reservation reservation) {
 		Room room = reservation.getRoom();
-		ReservationDto dto = new ReservationDto();
-		dto.setId(reservation.getId());
-		dto.setUserName(reservation.getUserName());
-		dto.setPeopleNumber(reservation.getPeopleNumber());
-		dto.setStartDate(reservation.getStartDate());
-		dto.setEndDate(reservation.getEndDate());
-		dto.setRoomId(room.getId());
-		dto.setType(room.getType());
-		return dto;
+		return ReservationDto.builder()
+				.id(reservation.getId())
+				.userName(reservation.getUserName())
+				.peopleNumber(reservation.getPeopleNumber())
+				.startDate(reservation.getStartDate())
+				.endDate(reservation.getEndDate())
+				.roomId(room.getId())
+				.type(room.getType())
+				.build();
 	}
 	
 	private Reservation updateReservation(Reservation reservation, ReservationDto dto) {
@@ -99,13 +99,13 @@ public class ReservationService {
 	}	
 	
 	private Reservation newReservation(ReservationDto dto, Room room) {
-		Reservation reservation = new Reservation();
-		reservation.setRoom(room);
-		reservation.setUserName(dto.getUserName());
-		reservation.setPeopleNumber(dto.getPeopleNumber());
-		reservation.setStartDate(dto.getStartDate());
-		reservation.setEndDate(dto.getEndDate());
-		return reservation;
+		return Reservation.builder()
+				.room(room)
+				.userName(dto.getUserName())
+				.peopleNumber(dto.getPeopleNumber())
+				.startDate(dto.getStartDate())
+				.endDate(dto.getEndDate())				
+				.build();
 	}
 	
 	private boolean isReservationAvailable(Long id, ReservationDto dto, Long roomId) {
