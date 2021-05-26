@@ -1,6 +1,13 @@
-package com.exercise.hotel.model;
+package com.exercise.processor.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import com.exercise.hotel.model.RoomType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

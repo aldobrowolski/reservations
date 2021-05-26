@@ -2,24 +2,21 @@ package com.exercise.hotel.services;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cloud.stream.messaging.Processor;
+import org.springframework.messaging.MessageChannel;
+
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 
+import com.exercise.hotel.ReservationBinding;
 import com.exercise.hotel.ReservationNotFoundException;
 import com.exercise.hotel.dao.ReservationRepository;
 import com.exercise.hotel.dao.RoomRepository;
@@ -38,12 +35,15 @@ public class ReservationServiceTest {
 
 	@Mock
 	private RoomRepository roomRepository;
+	
+	@Mock
+	private ReservationBinding processor;
 
 	private ReservationService reservationService;
 
 	@Before
 	public void setUp() {
-		reservationService = new ReservationService(reservationRepository, roomRepository);
+		reservationService = new ReservationService(reservationRepository, roomRepository, processor);
 	}
 
 	@Test

@@ -14,13 +14,10 @@ public class DatabaseLoader implements CommandLineRunner {
 
 	private RoomRepository roomRepository;
 
-	private ReservationRepository reservationRepository;
-
 	@Autowired
 	public DatabaseLoader(RoomRepository roomRepository, 
 			ReservationRepository reservationRepository) {
 		this.roomRepository = roomRepository;
-		this.reservationRepository = reservationRepository;
 	}
 
 	@Override

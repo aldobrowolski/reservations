@@ -27,5 +27,5 @@ public class LinkServiceTest {
 		String link = linkService.getReservationsLink();
 		
 		assertEquals("http://localhost/reservations", link);
-	}	
+	}
 }

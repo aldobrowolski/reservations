@@ -10,15 +10,13 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.exercise</groupId>
-	<artifactId>hotel</artifactId>
+	<artifactId>processor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hotel</name>
-	<description>Hotel Reservation</description>
-
+	<name>processor</name>
+	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -125,14 +123,6 @@
 			<artifactId>cf-maven-plugin</artifactId>
 			<version>1.1.3</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
-		</dependency> -->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -200,7 +190,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<!-- <pluginRepositories> <pluginRepository> <id>repository.springframework.maven.milestone</id> 
-		<name>Spring Framework Maven Milestone Repository</name> <url>http://maven.springframework.org/milestone</url> 
-		</pluginRepository> </pluginRepositories> -->
 </project>

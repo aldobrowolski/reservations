@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ReservationConstraint
 public class ReservationDto implements Serializable {
 	
 	/**

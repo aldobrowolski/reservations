@@ -6,11 +6,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.stereotype.Component;
+
+import com.exercise.hotel.ReservationBinding;
 import com.exercise.hotel.ReservationNotFoundException;
 import com.exercise.hotel.dao.*;
 import com.exercise.hotel.dto.ReservationDto;
 import com.exercise.hotel.model.*;
+
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 
 @Component
 public class ReservationService {
@@ -19,9 +25,12 @@ public class ReservationService {
 	
 	private RoomRepository roomRepository;
 	
-	public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository) {
+	private MessageChannel messageChannel;
+	
+	public ReservationService(ReservationRepository reservationRepository, RoomRepository roomRepository, ReservationBinding binding) {
 		this.reservationRepository = reservationRepository;
 		this.roomRepository = roomRepository;
+		messageChannel = binding.reservations();
 	}
 	
 	public List<ReservationDto> findAll() {
@@ -39,9 +48,9 @@ public class ReservationService {
 		Room room = reservation.getRoom();
 		validateGuestsNumber(dto, room);		
 		validateReservationAvailibility(id, dto, room);
-		updateReservation(reservation, dto);		
-		reservation.setRoom(room);
-		return reservationRepository.save(reservation);		
+		dto.setId(id);
+		messageChannel.send(MessageBuilder.withPayload(dto).build());
+		return reservation;		
 	}
 			
 	public void deleteReservation(Long id) {
@@ -76,15 +85,7 @@ public class ReservationService {
 				.type(room.getType())
 				.build();
 	}
-	
-	private Reservation updateReservation(Reservation reservation, ReservationDto dto) {
-		Optional.ofNullable(dto.getUserName()).ifPresent(userName -> reservation.setUserName(userName));
-		Optional.ofNullable(dto.getPeopleNumber()).ifPresent(number -> reservation.setPeopleNumber(number));
-		Optional.ofNullable(dto.getStartDate()).ifPresent(date -> reservation.setStartDate(date));
-		Optional.ofNullable(dto.getEndDate()).ifPresent(date -> reservation.setEndDate(date));
-		return reservation;
-	}
-	
+		
 	private RoomType selectRoomType(Integer count) {
 		if (count == null || count > PENTHOUSE.getMaxPeople()) {
 			throw new ReservationNotFoundException("Number of people not specified or greater than maximal of " + PENTHOUSE + '.');

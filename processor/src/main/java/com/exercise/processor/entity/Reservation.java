@@ -1,8 +1,7 @@
-package com.exercise.hotel.model;
+package com.exercise.processor.entity;
 
 import java.time.LocalDate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
